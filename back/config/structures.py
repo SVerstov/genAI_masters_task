@@ -46,13 +46,12 @@ class ConfigBase:
         # Переопределить если нужны дополнительные действия с конфигом
         pass
 
-    def __init__(self):
-        if os.getenv('DEV_MODE'):
-            self.conf_path = self.conf_path_dev
-            print('=== DEV MODE. DEV CONFIG ===')
+    def __init__(self, custom_path: Path = None):
+        if custom_path:
+            self.conf_path = custom_path
         else:
-            self.conf_path = self.conf_path_prod
-        self.conf_path = self.conf_path_dev if os.getenv('DEV_MODE') else self.conf_path_prod
+            self.conf_path = self.conf_path_dev if os.getenv('DEV_MODE') else self.conf_path_prod
+
         with open(self.conf_path, 'r', encoding='utf-8') as f:
             config_dct = yaml.safe_load(f)
 

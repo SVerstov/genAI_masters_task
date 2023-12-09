@@ -2,14 +2,14 @@ app:
   fast_api_port: 5000
 
 db:
-  type: postgresql
-  connector: asyncpg
-  host: localhost
+  type: "postgresql"
+  connector: "asyncpg"
+  host: "localhost"
   port: 5433
-  login: postgres
-  password: 020390
-  name: wb_bot
-  show_echo: no # if enable shows all SQL queries and results
+  login: "postgres"
+  password: "80808080"
+  name: "news_parser"
+  show_echo: false # if enable shows all SQL queries and results
   # performance settings:
 #  pool_size: 20
 #  max_overflow: 10
