@@ -16,8 +16,9 @@ class AppConfig(ConfigBranch):
 class DBConfig(ConfigBranch):
     type: str
     connector: str
-    host: str
-    port: int
+    url: str
+    # host: str
+    # port: int
     login: str
     password: str
     name: str

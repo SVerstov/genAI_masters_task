@@ -14,11 +14,9 @@ from db.base import Base
 
 
 def make_db_url() -> str:
-    print('CWD ----------------------------')
-    print(os.getcwd())
     config = Config()
     db = config.db
-    return f"{db.type}+{db.connector}://{db.login}:{db.password}@{db.host}:{db.port}/{db.name}"
+    return f"{db.type}+{db.connector}://{db.login}:{db.password}@{db.url}/{db.name}"
 
 
 db_url = make_db_url()

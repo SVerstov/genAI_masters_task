@@ -4,7 +4,7 @@ app:
 db:
   type: "postgresql"
   connector: "asyncpg"
-  url: "postgres"
+  url: "localhost:5432"
   name: "news_parser"
   login: "postgres"
   password: "superpass"
