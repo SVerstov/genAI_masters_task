@@ -16,7 +16,8 @@ from db.base import Base
 def make_db_url() -> str:
     config = Config()
     db = config.db
-    return f"{db.type}+{db.connector}://{db.login}:{db.password}@{db.url}/{db.name}"
+    url = f"{db.type}+{db.connector}://{db.login}:{db.password}@{db.host_and_port}/{db.name}"
+    return url
 
 
 db_url = make_db_url()

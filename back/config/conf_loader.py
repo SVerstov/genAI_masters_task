@@ -9,33 +9,33 @@ from config.structures import ConfigBranch, ConfigBase
 logger = logging.getLogger(__name__)
 
 
-class AppConfig(ConfigBranch):
-    fast_api_port: int
-
-
 class DBConfig(ConfigBranch):
     type: str
     connector: str
-    url: str
-    # host: str
-    # port: int
+    host_and_port: str
     login: str
     password: str
     name: str
     show_echo: bool
 
+    @property
+    def uri(self) -> str:
+        return f"{self.type}+{self.connector}://{self.login}:{self.password}@{self.host_and_port}/{self.name}"
+
 
 class ParserConfig(ConfigBranch):
-    parser_period_sec: int
+    parse_interval_sec: int
+    main_uri: str
+    news_uri: str
+    news_limit: int
 
 
 class Config(ConfigBase):
     """ Подключать ветки конфига (класс от ConfigBranch) сюда"""
     dev_mode: bool
 
-    app: AppConfig
     db: DBConfig
     parser: ParserConfig
 
     def after_load(self):
-        self.dev_mode = bool(os.getenv('DEV_MODE'))
+        self.dev_mode = bool(os.getenv('DEV'))

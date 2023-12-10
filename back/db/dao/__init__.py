@@ -8,7 +8,9 @@ class HolderDao:
     """ Главный DAO. Подключать новые сюда"""
 
     def __init__(self, session: AsyncSession):
-        self.news = NewsDAO
+        self.session = session
+
+        self.news = NewsDAO(session)
 
     async def commit(self):
         await self.session.commit()

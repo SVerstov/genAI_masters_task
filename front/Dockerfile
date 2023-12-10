@@ -1,4 +1,4 @@
-FROM node:21-alpine as build-stage
+FROM node:21-alpine as node
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN npm run build
 
 FROM nginx:alpine
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=node /app/dist /usr/share/nginx/html
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 

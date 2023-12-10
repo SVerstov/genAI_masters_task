@@ -1,10 +1,7 @@
-app:
-  fast_api_port: 5000
-
 db:
   type: "postgresql"
   connector: "asyncpg"
-  url: "postgres"
+  host_and_port: "postgres"
   name: "news_parser"
   login: "postgres"
   password: "superpass"
@@ -12,4 +9,6 @@ db:
 
 
 parser:
-  parser_period_sec: 300
+  parse_interval_sec: 300
+  main_uri: "https://news.am/eng/"
+  news_limit: 5

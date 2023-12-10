@@ -9,6 +9,5 @@ RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 COPY . /app
 RUN chmod +x /app/entrypoint.sh
 
-# Определяем команду запуска
 ENTRYPOINT ["/app/entrypoint.sh"]
 
