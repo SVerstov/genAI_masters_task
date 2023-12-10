@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Выполнение миграций Alembic
+# migrations
 alembic upgrade head
 
-# Запуск FastAPI приложения
+sleep 5
 python main.py

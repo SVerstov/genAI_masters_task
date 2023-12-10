@@ -36,6 +36,6 @@ docker-compose build
 * docker-compose up
 ```
 
-* By default, app will start on 8000 port!
+* By default, app will start on 8008 port!
 
 * Have a nice day!
