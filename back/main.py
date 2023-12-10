@@ -2,6 +2,7 @@ from typing import Union
 
 from fastapi import FastAPI, Request, HTTPException, Depends
 from sqlalchemy import desc, select
+from starlette.middleware.cors import CORSMiddleware
 from uvicorn import run
 
 from config import Config, setup_logging
@@ -35,9 +36,13 @@ async def add_dao_and_config_middleware(request: Request, call_next):
         return response
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/api/get_news")
