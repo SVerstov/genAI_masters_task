@@ -21,13 +21,12 @@
 import {onMounted, ref} from 'vue'
 import axios from 'axios'
 
-const domain = import.meta.env.VITE_DOMAIN
 const newsList = ref([])
-const activeNames = ref([])
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`${domain}/api/get_news`)
+    const baseUrl = `http://${window.location.hostname}:5000`;
+    const response = await axios.get(`${baseUrl}/api/get_news`)
     newsList.value = response.data
   } catch (error) {
     console.error('Ошибка при получении новостей:', error)
