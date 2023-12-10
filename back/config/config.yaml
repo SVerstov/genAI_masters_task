@@ -11,4 +11,5 @@ db:
 parser:
   parse_interval_sec: 300
   main_uri: "https://news.am/eng/"
+  news_uri: "https://news.am/eng/news/{id}.html"
   news_limit: 5
