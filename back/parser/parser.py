@@ -1,6 +1,6 @@
 import re
 from logging import getLogger
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
@@ -23,7 +23,7 @@ class Parser:
     async def run(self):
         logger.info('Parsing started!')
         news_ids = await self._parse_last_news_ids()
-        await self._filter_old_news_ids(news_ids)
+        news_ids = await self._filter_old_news_ids(news_ids)
         if not news_ids:
             logger.info('There are no new news!')
             return
@@ -32,7 +32,7 @@ class Parser:
             await self._parse_and_save_news_by_id(news_id)
         logger.info(f'Parsing complete! New news: {len(news_ids)}')
 
-    async def _parse_last_news_ids(self) -> set[int]:
+    async def _parse_last_news_ids(self) -> list[int]:
         """ find and return ids for the last news """
         limit = self.config.parser.news_limit
         response = await self.http_client.get(self.config.parser.main_uri)
@@ -45,18 +45,18 @@ class Parser:
             return []
 
         news_items = news_list_div.find_all('a', class_='news-item')
-        news_ids = set()
+        news_ids = []
         for item in news_items:
             if len(news_ids) >= limit:
                 break
             if not item.find(class_='border'):
                 news_id = re.findall(r'(\d+)\.html$', item['href'])
-                news_ids.add(int(news_id[0]))
+                news_ids.append(int(news_id[0]))
         return news_ids
 
-    async def _filter_old_news_ids(self, news_ids: set[int]):
+    async def _filter_old_news_ids(self, news_ids: list[int]) -> list[int]:
         old_ids = await self.dao.news.get_many(News.news_id.in_(news_ids), get_only=News.news_id)
-        news_ids.difference_update(old_ids)
+        return [x for x in news_ids if x not in old_ids]
 
     async def _parse_and_save_news_by_id(self, news_id: int):
         uri = self.config.parser.news_uri.format(id=news_id)
@@ -67,7 +67,8 @@ class Parser:
         news_block = soup.find('div', class_='article-text')
         img_el = news_block.find('img')
         if img_el:
-            img_link = urljoin(self.config.parser.main_uri, img_el['src'])
+            domain = f"https://{urlparse(self.config.parser.main_uri).netloc}"
+            img_link = urljoin(domain, img_el['src'])
         else:
             img_link = None
 

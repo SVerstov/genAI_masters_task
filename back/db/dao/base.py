@@ -1,6 +1,6 @@
 from typing import List, TypeVar, Type, Generic, Iterable
 
-from sqlalchemy import delete, func, select, update, Result
+from sqlalchemy import delete, func, select, update, Result, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.base import ExecutableOption, Executable
 
@@ -15,7 +15,7 @@ class BaseDAO(Generic[Model]):
         self.session = session
 
     async def get_many(self, *whereclauses, options: Iterable | ExecutableOption = None, limit: int = None,
-                       offset: int = None, order_by=None, join=None, get_only=None) -> list[Model]:
+                       offset: int = None, order_by=None, _desc=False,  join=None, get_only=None) -> list[Model]:
         """
         Fetch all records from the database with optional filtering, limiting, and offset.
 
@@ -45,7 +45,9 @@ class BaseDAO(Generic[Model]):
             stmt = stmt.limit(limit)
         if offset:
             stmt = stmt.offset(offset)
-        if order_by:
+        if order_by and _desc:
+            stmt = stmt.order_by(desc(order_by))
+        elif order_by:
             stmt = stmt.order_by(order_by)
         result = await self.session.execute(stmt)
         return result.scalars().all()
