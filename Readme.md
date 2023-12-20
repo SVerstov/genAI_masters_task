@@ -1,5 +1,9 @@
 # News parser
 
+## Summary
+This small app parses the https://news.am/eng/ site, saves the latest news in a database, and then displays the latest news on a Vue3 page."
+
+
 ## Prerequisites
 
 - Docker: Ensure you have Docker installed on your system.
